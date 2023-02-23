@@ -11,7 +11,7 @@ public class Enrolment
     private EnrolmentId enrolmentId;
 
     @ManyToOne
-    @MapsId("studet_id")
+    @MapsId("student_id")
     @JoinColumn(
             name = "student_id",
             foreignKey = @ForeignKey(name = "enrolment_student_id_fk")

@@ -20,6 +20,7 @@ public class SpringDataJpaApplication
     {
         SpringApplication.run(SpringDataJpaApplication.class, args);
     }
+
     @Bean
     public CommandLineRunner commandLineRunner(StudentRepository studentRepository ,
                                                StudentIdCardRepository studentIdCardRepository)
@@ -31,52 +32,63 @@ public class SpringDataJpaApplication
             String lastName = faker.name().lastName();
             String email = String.format("%s.%s@amigoscode.edu", firstName, lastName);
             int age = faker.number().numberBetween(17, 55);
-            Student student = new Student(firstName,
+            Student student1 = new Student(firstName,
                     lastName,
                     email,
                     age);
+            Book book1 = new Book("Clean Code", LocalDateTime.now().minusDays(4));
+            Book book2 = new Book("Think and Grow Rich", LocalDateTime.now());
+            Book book3 = new Book("Spring Data Jpa", LocalDateTime.now().minusYears(1));
 
-            student.addBook(
-                    new Book("Clean Code", LocalDateTime.now().minusDays(4)));
-            student.addBook(
-                    new Book("Think and Grow Rich", LocalDateTime.now()));
-            student.addBook(
-                    new Book("Spring Data Jpa", LocalDateTime.now().minusYears(1)));
+            student1.addBook(book1);
+            student1.addBook(book2);
+            student1.addBook(book3);
 
+            Student student2 = new Student("Aaryaman","pol","aaryamanpol15@gmail.com",18);
 
-            StudentIdCard studentIdCard = new StudentIdCard("123456789", student);
+            student2.addBook(new Book("Clean Code", LocalDateTime.now().minusDays(4)));
+            student2.addBook(new Book("Think and Grow Rich", LocalDateTime.now()));
+            student2.addBook(book3);
 
-            student.setStudentIdCard(studentIdCard);
-
-            student.addEnrolment(new Enrolment(
-                    new EnrolmentId(1L,1L),
-                    student,
-                    new Course("Computer Science" ,"IT"),
-                    LocalDateTime.now()
-            ));
-            student.addEnrolment(new Enrolment(
-                    new EnrolmentId(1L,2L),
-                    student,
-                    new Course("Amigoscode Spring Data JPA","IT"),
-                    LocalDateTime.now().minusDays(18)
-            ));
+            studentRepository.save(student2);
 
 
-//            student.enrolToCourse(new Course("Computer Science" ,"IT"));
-//            student.enrolToCourse(new Course("Amigoscode Spring Data JPA","IT"));
+//            StudentIdCard studentIdCard = new StudentIdCard("123456789", student1);
+//
+//            student1.setStudentIdCard(studentIdCard);
+
+//            student1.addEnrolment(new Enrolment(
+//                    new EnrolmentId(1L,1L),
+//                    student1,
+//                    new Course("Computer Science" ,"IT"),
+//                    LocalDateTime.now()
+//            ));
+//            student1.addEnrolment(new Enrolment(
+//                    new EnrolmentId(1L,2L),
+//                    student1,
+//                    new Course("Amigoscode Spring Data JPA","IT"),
+//                    LocalDateTime.now().minusDays(18)
+//            ));
 
 
-            studentRepository.save(student);
+//            student1.enrolToCourse(new Course("Computer Science" ,"IT"));
+//            student1.enrolToCourse(new Course("Amigoscode Spring Data JPA","IT"));
+
+
+            studentRepository.save(student1);
 
 
             studentRepository.findById(1L)
                     .ifPresent(s -> {
                                 System.out.println("fetch books lazy ...");
-                                List<Book> books = student.getBooks();
+                                List<Book> books = student1.getBooks();
                                 books.forEach(book ->{
                                     System.out.println(s.getFirstName()+" Borrowed " +book.getBookName());
                                 });
                             });
+//            studentRepository.findAllById(Arrays.asList(1L,2L)).forEach(s->{
+//                List<Book> books = s
+//            });
 
 //            System.out.println("StudentIdCard Repo");
 //            studentIdCardRepository.findById(1L).ifPresentOrElse(System.out::println,
